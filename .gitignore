@@ -1,0 +1,7 @@
+bin/
+*.exe
+*.o
+*.zip
+prng_sample/
+/Lab01.pdf
+/pseudocode-modular-operation.pdf

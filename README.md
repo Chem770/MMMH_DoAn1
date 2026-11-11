@@ -50,7 +50,7 @@ After both return real values, `make run` computes:
 
 ## Report
 
-Put the PDF in `project_01_report/`. The lab asks for these sections:
+Write the PDF after the program is finished. It is not in this repo. The lab asks for these sections:
 
 1. The big-integer type and how `+`, `-`, comparison, `mod`, `AddMod`, `MulMod`, and `ExpMod` work. That description can follow the code already in this repo.
 2. The primality test you implemented.

@@ -20,15 +20,51 @@ uint512_t generate_safe_prime(prng_ctx *ctx, size_t bitsize)
     return uint512_t(0);
 }
 
+
+static size_t bit_length(const uint512_t &x)
+{
+    for (int i = 7; i >= 0; i--)
+    {
+        if (x.digits[i] != 0)
+            return (size_t)i * 64 + (64 - (size_t)__builtin_clzll(x.digits[i]));
+    }
+    return 0;
+}
+
+static uint512_t random_bits(prng_ctx *ctx, size_t bits)
+{
+    uint512_t r;
+    for (size_t i = 0; i < 8; i++)
+    {
+        size_t low = i * 64; 
+        if (low >= bits)
+            break; 
+        uint64_t limb = prng_next_u64(ctx);
+        size_t need = bits - low;
+        if (need < 64)
+            limb &= (((uint64_t)1 << need) - 1);
+        r.digits[i] = limb;
+    }
+    return r;
+}
+
 uint512_t generate_private_key(prng_ctx *ctx, const uint512_t &p)
 {
-    // Requirements from docs/Lab01.pdf, section 2.3:
-    //   Return a random integer in the closed interval [2, p - 2].
-    //
-    // Suggested steps:
-    //   1. Fill a uint512_t from prng_next_u64.
-    //   2. Reject the sample while it is outside [2, p - 2]. Reducing mod (p - 3) and adding 2 also works.
-    (void)ctx;
-    (void)p;
-    return uint512_t(0);
+    uint512_t two;
+    two.digits[0] = 2;
+    uint512_t five;
+    five.digits[0] = 5;
+
+    if (p < five)
+        return uint512_t();
+
+    const uint512_t hi = p - two;
+    const size_t bits = bit_length(p);
+
+    while (true)
+    {
+        uint512_t k = random_bits(ctx, bits);
+        if (k >= two && k <= hi)
+            return k;
+    }
 }

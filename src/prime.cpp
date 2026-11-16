@@ -1,4 +1,5 @@
 #include "dh.h"
+#include <stdexcept>
 // This file is the open half of the lab. The signatures match include/dh.h.
 // Both functions currently return 0 so the project compiles. Replace the body.
 

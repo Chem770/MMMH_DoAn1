@@ -20,12 +20,17 @@ bin/test_modular: $(CORE) tests/test_modular.cpp
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $(INC) $(CORE) tests/test_modular.cpp -o bin/test_modular
 
+bin/test_private_key: $(CORE) src/prime.cpp tests/test_private_key.cpp $(PRNG) bin/fips202.o
+	mkdir -p bin
+	$(CXX) $(CXXFLAGS) $(INC) $(CORE) src/prime.cpp tests/test_private_key.cpp $(PRNG) bin/fips202.o -o bin/test_private_key
+
 bin/dh: $(CORE) src/prime.cpp src/main.cpp $(PRNG) bin/fips202.o
 	mkdir -p bin
 	$(CXX) $(CXXFLAGS) $(INC) $(CORE) src/prime.cpp src/main.cpp $(PRNG) bin/fips202.o -o bin/dh
 
-test: bin/test_modular
+test: bin/test_modular bin/test_private_key
 	./bin/test_modular
+	./bin/test_private_key
 
 run: bin/dh
 	./bin/dh

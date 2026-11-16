@@ -13,19 +13,19 @@ FIPS := lib/fips202/fips202.c
 all: bin/dh
 
 bin/fips202.o: $(FIPS)
-	mkdir -p bin
+	if not exist bin mkdir bin
 	$(CC) $(CFLAGS) -Ilib/fips202 -c $(FIPS) -o bin/fips202.o
 
 bin/test_modular: $(CORE) tests/test_modular.cpp
-	mkdir -p bin
+	if not exist bin mkdir bin
 	$(CXX) $(CXXFLAGS) $(INC) $(CORE) tests/test_modular.cpp -o bin/test_modular
 
 bin/test_private_key: $(CORE) src/prime.cpp tests/test_private_key.cpp $(PRNG) bin/fips202.o
-	mkdir -p bin
+	if not exist bin mkdir bin
 	$(CXX) $(CXXFLAGS) $(INC) $(CORE) src/prime.cpp tests/test_private_key.cpp $(PRNG) bin/fips202.o -o bin/test_private_key
 
 bin/dh: $(CORE) src/prime.cpp src/main.cpp $(PRNG) bin/fips202.o
-	mkdir -p bin
+	if not exist bin mkdir bin
 	$(CXX) $(CXXFLAGS) $(INC) $(CORE) src/prime.cpp src/main.cpp $(PRNG) bin/fips202.o -o bin/dh
 
 test: bin/test_modular bin/test_private_key
